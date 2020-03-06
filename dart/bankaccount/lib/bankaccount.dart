@@ -22,4 +22,12 @@ class Account {
     }
     return Account(balance: balance - value);
   }
+
+  String printStatement() {
+    var currentDate = DateTime.now();
+    return '''
+    Date\t\t\t\tAmount\t\t\t\tBalance
+    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t$balance\t\t\t\t$balance
+    ''';
+  }
 }

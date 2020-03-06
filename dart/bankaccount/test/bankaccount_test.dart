@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 void main() {
   test('deposit negative number should throw an invalid argument exception',
       () {
-    Account account = Account();
+    var account = Account();
 
     expect(
         () => account.deposit(-1),
@@ -15,36 +15,35 @@ void main() {
   });
 
   test('deposit 0 should throw an invalid argument exception', () {
-    Account account = Account();
+    var account = Account();
 
     expect(
         () => account.deposit(0),
         throwsA(isA<ArgumentError>().having(
-            (error) => error.message, "message", "You can't deposit 0")));
+            (error) => error.message, 'message', "You can't deposit 0")));
   });
 
   test('deposit positive value should return new Account with positive balance',
       () {
-    Account account = Account();
+    var account = Account();
 
-    Account newAccount = account.deposit(1);
+    var newAccount = account.deposit(1);
 
     expect(newAccount.balance, 1);
   });
 
   test('deposit 10 then 100 should return new Account with 110 for balance',
       () {
-    Account account = Account();
+    var account = Account();
 
-    Account tmp = account.deposit(10);
-    Account newAccount = tmp.deposit(100);
+    var newAccount = account.deposit(10).deposit(100);
 
     expect(newAccount.balance, 110);
   });
 
   test('withdraw negative number should throw an invalid argument exception',
       () {
-    Account account = Account();
+    var account = Account();
 
     expect(
         () => account.withdraw(-1),
@@ -54,7 +53,7 @@ void main() {
 
   test('withdraw 0 should throw an invalid argument exception',
       () {
-    Account account = Account();
+    var account = Account();
 
     expect(
         () => account.withdraw(0),
@@ -64,10 +63,25 @@ void main() {
 
   test('withdraw positive value should return new Account with negative balance',
       () {
-    Account account = Account();
+    var account = Account();
 
-    Account newAccount = account.withdraw(10);
+    var newAccount = account.withdraw(10);
 
     expect(newAccount.balance, -10);
+  });
+
+    test('printStatement after a deposit should show the date of the deposit and the value given and the current balance',
+      () {
+    var account = Account();
+
+    var statement = account.deposit(500).printStatement();
+
+    var currentDate = DateTime.now();
+
+    expect(statement, '''
+    Date\t\t\t\tAmount\t\t\t\tBalance
+    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t500\t\t\t\t500
+    ''');
+
   });
 }
