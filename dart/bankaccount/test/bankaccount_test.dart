@@ -51,4 +51,14 @@ void main() {
         throwsA(isA<ArgumentError>().having((error) => error.message, "message",
             "You can't withdraw negative value")));
   });
+
+  test('withdraw 0 should throw an invalid argument exception',
+      () {
+    Account account = Account();
+
+    expect(
+        () => account.withdraw(0),
+        throwsA(isA<ArgumentError>().having((error) => error.message, "message",
+            "You can't withdraw 0")));
+  });
 }
