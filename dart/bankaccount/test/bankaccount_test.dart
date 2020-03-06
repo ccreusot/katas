@@ -23,4 +23,13 @@ void main() {
         "message",
         "You can't deposit 0")));
   });
+
+  test('deposit positive value should return new Account with positive balance', () {
+    Account account = Account();
+
+    Account newAccount = account.deposit(1);
+
+    expect(newAccount.balance(), 1);
+  });
+
 }
