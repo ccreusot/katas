@@ -51,17 +51,17 @@ void main() {
             "You can't withdraw negative value")));
   });
 
-  test('withdraw 0 should throw an invalid argument exception',
-      () {
+  test('withdraw 0 should throw an invalid argument exception', () {
     var account = Account();
 
     expect(
         () => account.withdraw(0),
-        throwsA(isA<ArgumentError>().having((error) => error.message, "message",
-            "You can't withdraw 0")));
+        throwsA(isA<ArgumentError>().having(
+            (error) => error.message, "message", "You can't withdraw 0")));
   });
 
-  test('withdraw positive value should return new Account with negative balance',
+  test(
+      'withdraw positive value should return new Account with negative balance',
       () {
     var account = Account();
 
@@ -70,7 +70,19 @@ void main() {
     expect(newAccount.balance, -10);
   });
 
-    test('printStatement after a deposit should show the date of the deposit and the value given and the current balance',
+  test('printStatement without statement deposit', () {
+    var account = Account();
+
+    var statement = account.printStatement();
+
+    expect(statement, '''
+    Date\t\t\t\tAmount\t\t\t\tBalance
+        \t\t\t\t      \t\t\t\t0
+    ''');
+  });
+
+  test(
+      'printStatement after a deposit should show the date of the deposit and the value given and the current balance',
       () {
     var account = Account();
 
@@ -82,6 +94,5 @@ void main() {
     Date\t\t\t\tAmount\t\t\t\tBalance
     ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t500\t\t\t\t500
     ''');
-
   });
 }
