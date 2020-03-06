@@ -29,7 +29,15 @@ void main() {
 
     Account newAccount = account.deposit(1);
 
-    expect(newAccount.balance(), 1);
+    expect(newAccount.balance, 1);
   });
 
+  test('deposit 10 then 100 should return new Account with 110 for balance', () {
+    Account account = Account();
+
+    Account tmp = account.deposit(10);
+    Account newAccount = tmp.deposit(100);
+
+    expect(newAccount.balance, 110);
+  });
 }

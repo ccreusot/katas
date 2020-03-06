@@ -1,5 +1,9 @@
 
 class Account {
+  final int balance;
+
+  Account({this.balance = 0});
+
   Account deposit(int value) {
     if (value == 0) {
       throw ArgumentError("You can't deposit 0");
@@ -7,10 +11,6 @@ class Account {
     if (value < 0) {
       throw ArgumentError("You can't deposit negative value");
     }
-    return Account();
-  }
-
-  int balance() {
-    return 1;
+    return Account(balance: balance + value);
   }
 }
