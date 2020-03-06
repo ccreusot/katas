@@ -13,10 +13,13 @@ class Account {
     return Account(balance: balance + value);
   }
 
-  withdraw(int value) {
+  Account withdraw(int value) {
     if (value == 0) {
       throw ArgumentError("You can't withdraw 0");
     }
-    throw ArgumentError("You can't withdraw negative value");
+    if (value < 0) {
+      throw ArgumentError("You can't withdraw negative value");
+    }
+    return Account(balance: balance - value);
   }
 }

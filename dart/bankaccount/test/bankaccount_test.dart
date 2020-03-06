@@ -61,4 +61,13 @@ void main() {
         throwsA(isA<ArgumentError>().having((error) => error.message, "message",
             "You can't withdraw 0")));
   });
+
+  test('withdraw positive value should return new Account with negative balance',
+      () {
+    Account account = Account();
+
+    Account newAccount = account.withdraw(10);
+
+    expect(newAccount.balance, -10);
+  });
 }
