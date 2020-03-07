@@ -1,10 +1,11 @@
 class Account {
   final List<Transaction> transactions;
+  final DateProvider _dateProvider;
 
   int get balance =>
       transactions.fold(0, (previous, current) => previous + current.value);
 
-  Account({this.transactions = const []});
+  Account(this._dateProvider, {this.transactions = const []});
 
   Account deposit(int value) {
     if (value == 0) {
@@ -14,8 +15,8 @@ class Account {
       throw ArgumentError("You can't deposit negative value");
     }
     var newList = List.of(transactions);
-    newList.add(Transaction(value));
-    return Account(transactions: newList);
+    newList.add(Transaction(_dateProvider.current(), value));
+    return Account(_dateProvider, transactions: newList);
   }
 
   Account withdraw(int value) {
@@ -26,8 +27,8 @@ class Account {
       throw ArgumentError("You can't withdraw negative value");
     }
     var newList = List.of(transactions);
-    newList.add(Transaction(-value));
-    return Account(transactions: newList);
+    newList.add(Transaction(_dateProvider.current(), -value));
+    return Account(_dateProvider, transactions: newList);
   }
 
   String printStatement() {
@@ -50,8 +51,12 @@ class Account {
 }
 
 class Transaction {
-  final DateTime date = DateTime.now();
+  final DateTime date;
   final int value;
 
-  Transaction(this.value);
+  Transaction(this.date, this.value);
+}
+
+abstract class DateProvider {
+  DateTime current();
 }

@@ -1,13 +1,22 @@
 import 'package:bankaccount/bankaccount.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 // Write a class Account that offers the following methods void deposit(int) void withdraw(int) String printStatement()
+// Make it sure that when we're depositing or withdrawing we're using a date provider to get the current date.
+
+class MockDateProvider extends Mock implements DateProvider {}
 
 void main() {
+  var dateProvider;
+  var account;
+  setUp(() {
+    dateProvider = MockDateProvider();
+    account = Account(dateProvider);
+  });
+
   test('deposit negative number should throw an invalid argument exception',
       () {
-    var account = Account();
-
     expect(
         () => account.deposit(-1),
         throwsA(isA<ArgumentError>().having((error) => error.message, 'message',
@@ -15,8 +24,6 @@ void main() {
   });
 
   test('deposit 0 should throw an invalid argument exception', () {
-    var account = Account();
-
     expect(
         () => account.deposit(0),
         throwsA(isA<ArgumentError>().having(
@@ -25,26 +32,24 @@ void main() {
 
   test('deposit positive value should return new Account with positive balance',
       () {
-    var account = Account();
-
+    when(dateProvider.current()).thenReturn(DateTime.now());
     var newAccount = account.deposit(1);
 
+    verify(dateProvider.current());
     expect(newAccount.balance, 1);
   });
 
   test('deposit 10 then 100 should return new Account with 110 for balance',
       () {
-    var account = Account();
-
+    when(dateProvider.current()).thenReturn(DateTime.now());
     var newAccount = account.deposit(10).deposit(100);
 
+    verifyInOrder([dateProvider.current(), dateProvider.current()]);
     expect(newAccount.balance, 110);
   });
 
   test('withdraw negative number should throw an invalid argument exception',
       () {
-    var account = Account();
-
     expect(
         () => account.withdraw(-1),
         throwsA(isA<ArgumentError>().having((error) => error.message, 'message',
@@ -52,8 +57,6 @@ void main() {
   });
 
   test('withdraw 0 should throw an invalid argument exception', () {
-    var account = Account();
-
     expect(
         () => account.withdraw(0),
         throwsA(isA<ArgumentError>().having(
@@ -63,16 +66,14 @@ void main() {
   test(
       'withdraw positive value should return new Account with negative balance',
       () {
-    var account = Account();
-
+    when(dateProvider.current()).thenReturn(DateTime.now());
     var newAccount = account.withdraw(10);
 
+    verify(dateProvider.current());
     expect(newAccount.balance, -10);
   });
 
   test('printStatement without statement deposit', () {
-    var account = Account();
-
     var statement = account.printStatement();
 
     expect(statement, '''
@@ -84,7 +85,7 @@ void main() {
   test(
       'printStatement after a deposit should show the date of the deposit and the value given and the current balance',
       () {
-    var account = Account();
+    when(dateProvider.current()).thenReturn(DateTime.now());
 
     var statement = account.deposit(500).printStatement();
 
@@ -99,17 +100,19 @@ void main() {
     test(
       'printStatement after a deposit and withdraw should show the date of the deposits and the values given and the current balance for each operations',
       () {
-    var account = Account();
-
-    var statement = account.deposit(500).withdraw(100).deposit(200).printStatement();
-
-    var currentDate = DateTime.now();
+    when(dateProvider.current()).thenReturn(DateTime.utc(2019, 2, 2));
+    var newAccount = account.deposit(500);
+    when(dateProvider.current()).thenReturn(DateTime.utc(2019, 6, 24));
+    newAccount = newAccount.withdraw(100);
+    when(dateProvider.current()).thenReturn(DateTime.utc(2020, 1, 29));
+    newAccount = newAccount.deposit(200);
+    var statement = newAccount.printStatement();
 
     expect(statement, '''
     Date\t\t\t\tAmount\t\t\t\tBalance
-    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t500\t\t\t\t500
-    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t-100\t\t\t\t400
-    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t200\t\t\t\t600
+    2.2.2019\t\t\t\t500\t\t\t\t500
+    24.6.2019\t\t\t\t-100\t\t\t\t400
+    29.1.2020\t\t\t\t200\t\t\t\t600
     ''');
   });
 }
