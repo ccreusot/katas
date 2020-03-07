@@ -10,7 +10,7 @@ void main() {
 
     expect(
         () => account.deposit(-1),
-        throwsA(isA<ArgumentError>().having((error) => error.message, "message",
+        throwsA(isA<ArgumentError>().having((error) => error.message, 'message',
             "You can't deposit negative value")));
   });
 
@@ -47,7 +47,7 @@ void main() {
 
     expect(
         () => account.withdraw(-1),
-        throwsA(isA<ArgumentError>().having((error) => error.message, "message",
+        throwsA(isA<ArgumentError>().having((error) => error.message, 'message',
             "You can't withdraw negative value")));
   });
 
@@ -57,7 +57,7 @@ void main() {
     expect(
         () => account.withdraw(0),
         throwsA(isA<ArgumentError>().having(
-            (error) => error.message, "message", "You can't withdraw 0")));
+            (error) => error.message, 'message', "You can't withdraw 0")));
   });
 
   test(
