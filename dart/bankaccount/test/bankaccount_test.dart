@@ -95,4 +95,21 @@ void main() {
     ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t500\t\t\t\t500
     ''');
   });
+
+    test(
+      'printStatement after a deposit and withdraw should show the date of the deposits and the values given and the current balance for each operations',
+      () {
+    var account = Account();
+
+    var statement = account.deposit(500).withdraw(100).deposit(200).printStatement();
+
+    var currentDate = DateTime.now();
+
+    expect(statement, '''
+    Date\t\t\t\tAmount\t\t\t\tBalance
+    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t500\t\t\t\t500
+    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t-100\t\t\t\t400
+    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t200\t\t\t\t600
+    ''');
+  });
 }

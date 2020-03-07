@@ -31,16 +31,20 @@ class Account {
   }
 
   String printStatement() {
-    var currentDate = DateTime.now();
+    var balance = 0;
     if (transactions.isEmpty) {
       return '''
     Date\t\t\t\tAmount\t\t\t\tBalance
         \t\t\t\t      \t\t\t\t$balance
     ''';
     }
+    var transactionStatements = <String>[];
+    for (var transaction in transactions) {
+      balance += transaction.value;
+      transactionStatements.add("${transaction.date.day}.${transaction.date.month}.${transaction.date.year}\t\t\t\t${transaction.value}\t\t\t\t$balance");
+    }
     return '''
-    Date\t\t\t\tAmount\t\t\t\tBalance
-    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t$balance\t\t\t\t$balance
+    Date\t\t\t\tAmount\t\t\t\tBalance${transactionStatements.fold("", (previous, current) => previous + "\n    " + current)}
     ''';
   }
 }
