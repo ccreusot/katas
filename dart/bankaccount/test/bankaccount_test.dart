@@ -30,24 +30,6 @@ void main() {
             (error) => error.message, 'message', "You can't deposit 0")));
   });
 
-  test('deposit positive value should return new Account with positive balance',
-      () {
-    when(dateProvider.current()).thenReturn(DateTime.now());
-    var newAccount = account.deposit(1);
-
-    verify(dateProvider.current());
-    expect(newAccount.balance, 1);
-  });
-
-  test('deposit 10 then 100 should return new Account with 110 for balance',
-      () {
-    when(dateProvider.current()).thenReturn(DateTime.now());
-    var newAccount = account.deposit(10).deposit(100);
-
-    verifyInOrder([dateProvider.current(), dateProvider.current()]);
-    expect(newAccount.balance, 110);
-  });
-
   test('withdraw negative number should throw an invalid argument exception',
       () {
     expect(
@@ -63,16 +45,6 @@ void main() {
             (error) => error.message, 'message', "You can't withdraw 0")));
   });
 
-  test(
-      'withdraw positive value should return new Account with negative balance',
-      () {
-    when(dateProvider.current()).thenReturn(DateTime.now());
-    var newAccount = account.withdraw(10);
-
-    verify(dateProvider.current());
-    expect(newAccount.balance, -10);
-  });
-
   test('printStatement without statement deposit', () {
     var statement = account.printStatement();
 
@@ -83,21 +55,6 @@ void main() {
   });
 
   test(
-      'printStatement after a deposit should show the date of the deposit and the value given and the current balance',
-      () {
-    when(dateProvider.current()).thenReturn(DateTime.now());
-
-    var statement = account.deposit(500).printStatement();
-
-    var currentDate = DateTime.now();
-
-    expect(statement, '''
-    Date\t\t\t\tAmount\t\t\t\tBalance
-    ${currentDate.day}.${currentDate.month}.${currentDate.year}\t\t\t\t500\t\t\t\t500
-    ''');
-  });
-
-    test(
       'printStatement after a deposit and withdraw should show the date of the deposits and the values given and the current balance for each operations',
       () {
     when(dateProvider.current()).thenReturn(DateTime.utc(2019, 2, 2));

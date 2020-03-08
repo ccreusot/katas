@@ -2,9 +2,6 @@ class Account {
   final List<Transaction> transactions;
   final DateProvider _dateProvider;
 
-  int get balance =>
-      transactions.fold(0, (previous, current) => previous + current.value);
-
   Account(this._dateProvider, {this.transactions = const []});
 
   Account deposit(int value) {
