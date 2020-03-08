@@ -1,5 +1,13 @@
-import 'package:bankaccount/bankaccount.dart' as bankaccount;
+import 'package:bankaccount/bankaccount.dart';
+
+class DateRepository implements DateProvider {
+  @override
+  DateTime current() {
+    return DateTime.now();
+  }
+}
 
 void main(List<String> arguments) {
-  print('Hello world: ${bankaccount.calculate()}!');
+  var account = Account(DateRepository());
+  print(account.deposit(100).withdraw(20).printStatement());
 }
