@@ -29,12 +29,25 @@ void main() {
     expect(cell.alive, equals(false));
   });
 
-  test("A living cell with two or three neighbors alives: Survives !", () {
+  test("A living cell with two neighbors alives: Survives !", () {
     Cell cell = Cell(alive: true);
     List<List<Cell>> board = [
       [Cell(), Cell(), Cell(alive: true)],
       [Cell(), cell, Cell(alive: true)],
       [Cell(), Cell(), Cell()]
+    ];
+
+    cell.watchAround(board);
+
+    expect(cell.alive, equals(true));
+  });
+
+    test("A living cell with three neighbors alives: Survives !", () {
+    Cell cell = Cell(alive: true);
+    List<List<Cell>> board = [
+      [Cell(), Cell(), Cell(alive: true)],
+      [Cell(), cell, Cell(alive: true)],
+      [Cell(alive: true), Cell(), Cell()]
     ];
 
     cell.watchAround(board);
