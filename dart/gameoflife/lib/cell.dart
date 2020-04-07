@@ -35,7 +35,7 @@ class Cell {
     Cell bottomRight = (bottom != null && right != null) ? board[y + 1][x + 1] : null;
 
     List<Cell> cellsAround = [topLeft, top, topRight, left, right, bottomLeft, bottom, bottomRight];
-    int nbAliveCells = cellsAround.where((Cell cell) => cell.alive).length;
+    int nbAliveCells = cellsAround.where((Cell cell) => cell != null && cell.alive).length;
 
     if (nbAliveCells < 2 || nbAliveCells > 3) {
       alive = false;
