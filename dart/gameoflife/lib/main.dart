@@ -151,12 +151,15 @@ class _GamePageState extends State<GamePage>
   Game game;
 
   Ticker _ticker;
+  Stopwatch _stopwatch;
 
   @override
   void initState() {
     super.initState();
     game = Game(board: Board.randomized(widget.width, widget.height));
     _ticker = createTicker(update);
+    _stopwatch = Stopwatch();
+    _stopwatch.start();
     _ticker.start();
   }
 
@@ -191,14 +194,17 @@ class _GamePageState extends State<GamePage>
   }
 
   void update(Duration elapsed) {
-    if (elapsed.inMilliseconds >= 500) {
+    _stopwatch.stop();
+    if (_stopwatch.elapsedMilliseconds >= 500) {
       setState(() {
         game.update();
         if (game.isEndReached()) {
           _ticker.stop();
         }
       });
+      _stopwatch.reset();
     }
+    _stopwatch.start();
   }
 
   @override
